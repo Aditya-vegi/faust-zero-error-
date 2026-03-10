@@ -20,6 +20,7 @@
  ************************************************************************/
 
 #include <math.h>
+#include <limits>
 
 #include "Text.hh"
 #include "compatibility.hh"
@@ -115,7 +116,13 @@ class RemainderPrim : public xtended {
     }
 
     double compute(const std::vector<Node>& args) override
-    {
-        return remainder(args[0].getDouble(), args[1].getDouble());
+{
+    double a = args[0].getDouble();
+    double b = args[1].getDouble();
+
+    if (b == 0.0) {
+        return std::numeric_limits<double>::quiet_NaN();
     }
-};
+
+    return remainder(a, b);
+}};

@@ -20,6 +20,7 @@
  ************************************************************************/
 
 #include <math.h>
+#include <limits>
 
 #include "Text.hh"
 #include "floats.hh"
@@ -99,5 +100,15 @@ class TanPrim : public xtended {
         return sigDiv(sigReal(1.0), sigPow(sigCos(args[0]), sigReal(2.0)));
     }
 
-    double compute(const std::vector<Node>& args) override { return tan(args[0].getDouble()); }
+double compute(const std::vector<Node>& args) override
+{
+    double x = args[0].getDouble();
+    double c = cos(x);
+
+    if (std::abs(c) < 1e-12) {
+        return std::numeric_limits<double>::quiet_NaN();
+    }
+
+    return tan(x);
+}
 };

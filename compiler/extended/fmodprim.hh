@@ -20,6 +20,7 @@
  ************************************************************************/
 
 #include <math.h>
+#include <limits>
 
 #include "Text.hh"
 #include "floats.hh"
@@ -109,9 +110,14 @@ class FmodPrim : public xtended {
         // (f % g)' = f' - g' * floor(f / g), sin(pi * f / g) != 0
         return sigSub(args[2], sigMul(args[3], sigFloor(sigDiv(args[0], args[1]))));
     }
+double compute(const std::vector<Node>& args) override
+{
+    double a = args[0].getDouble();
+    double b = args[1].getDouble();
 
-    double compute(const std::vector<Node>& args) override
-    {
-        return fmod(args[0].getDouble(), args[1].getDouble());
+    if (b == 0.0) {
+        return std::numeric_limits<double>::quiet_NaN();
     }
-};
+
+    return fmod(a, b);
+}};
